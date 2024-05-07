@@ -1,4 +1,5 @@
 const express = require("express");
+const userRoutes = express.Router();
 
 const {
   registerUser,
@@ -19,7 +20,6 @@ const {
 } = require("../middleware/userValidation");
 
 const { ensureAuthenticated } = require("../middleware/auth");
-const userRoutes = express.Router();
 
 userRoutes.post("/register", userRegisterValidate, registerUser);
 userRoutes.get("/verify", verifyMail);
