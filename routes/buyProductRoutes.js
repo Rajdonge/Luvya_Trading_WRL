@@ -15,5 +15,9 @@ buyProductRoutes.get(
   buy_product_controller.get_purchased_items
 );
 
-buyProductRoutes.get("/admin-check-orders", ensureAuthenticated, buy_product_controller.get_purchased_items_by_admin);
+buyProductRoutes.get(
+  "/admin-check-orders",
+  ensureAuthenticated,
+  buy_product_controller.get_purchased_items_by_admin
+);
 module.exports = buyProductRoutes;

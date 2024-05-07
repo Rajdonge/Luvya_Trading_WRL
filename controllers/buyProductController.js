@@ -1,5 +1,6 @@
 const BuyProductModel = require("../models/BuyProductModel");
 const BuyProduct = require("../models/BuyProductModel");
+const CartModel = require("../models/CartModel");
 
 const buy_product = async (req, res) => {
   try {
@@ -12,6 +13,10 @@ const buy_product = async (req, res) => {
     });
 
     const buyProductData = await buyProduct.save();
+
+    // Remove the corresponding item from the cart
+    await CartModel.deleteOne({ product_id: req.body.product_id, user: userId });
+
     res
       .status(200)
       .send({
@@ -30,6 +35,7 @@ const get_purchased_items = async (req, res) => {
     const userId = req.user._id;
     // Find the cart items associated with the user
     const purchasedItems = await BuyProductModel.find({ user: userId });
+    console.log("Purchased: ", purchasedItems);
 
     return res.status(200).send({ success: true, msg: "Purchased items found", data: purchasedItems });
   } catch (error) {
@@ -41,9 +47,9 @@ const get_purchased_items = async (req, res) => {
 const get_purchased_items_by_admin = async (req, res) => {
   try {
     // Find the cart items associated with the user
-    const purchasedItems = await BuyProductModel.find();
+    const purchasedItems_admin = await BuyProductModel.find();
 
-    return res.status(200).send({ success: true, msg: "Purchased items found", data: purchasedItems });
+    return res.status(200).send({ success: true, msg: "Purchased items found", data: purchasedItems_admin });
   } catch (error) {
     return res.status(400).send({ success: false, msg: error.message });
   }
